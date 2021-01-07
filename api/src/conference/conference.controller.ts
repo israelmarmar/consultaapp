@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Param, Get, UseGuards } from '@nestjs/common';
+import { Controller, Post, Delete, Body, Param, Get, UseGuards, Query } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Conference } from './conference.entity';
 import { ConferenceService } from './conference.service';
@@ -11,12 +11,13 @@ import { User } from '@src/user/user.entity';
 export class ConferenceController {
   constructor(private conferenceService: ConferenceService) {}
 
-  @Post('create')
+  @Get('create')
   @UseGuards(AuthGuard())
   async createConference(
-    @Body() conference: CreateConferenceInput,
+    @Query() conference: CreateConferenceInput,
     @GetUser() user: User,
   ): Promise<Conference> {
+    console.log(conference);
     return this.conferenceService.createConference({
       ...conference,
       user: user,
@@ -28,6 +29,15 @@ export class ConferenceController {
     @Param('id') conferenceId: string,
   ): Promise<Conference> {
     return this.conferenceService.findConferenceById(conferenceId);
+  }
+
+  @Delete('delete/:id')
+  @UseGuards(AuthGuard(), RolesGuard)
+  async deleteCourse(
+    @Param('id') conferenceId: string,
+    @GetUser() user: User
+  ) {
+    return this.conferenceService.deleteConference(user, conferenceId);
   }
 
   @Get('show')
