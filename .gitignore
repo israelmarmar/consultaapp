@@ -1,0 +1,12 @@
+api/dist
+api/node_modules/**/*
+web/node_modules/**/*
+web/.expo/*
+web/npm-debug.*
+web/*.jks
+web/*.p8
+web/*.p12
+web/*.key
+web/*.webprovision
+web/*.orig.*
+web/web-build/
